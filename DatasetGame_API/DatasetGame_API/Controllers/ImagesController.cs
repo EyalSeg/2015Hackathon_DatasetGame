@@ -11,16 +11,21 @@ namespace DatasetGame_API.Controllers
 {
     public class ImagesController : ApiController
     {
-        private string _DirectoryPath = HttpContext.Current.Server.MapPath("~/App_Data/Images");
+        private string m_DirectoryPath = HttpContext.Current.Server.MapPath("~/App_Data/Images");
 
         public HttpResponseMessage GetPictureById(string id)
         {
             if (id.ToLower() == "random")
+            {
                 id = GetRandomImageId();
+            }
 
             var file = GetFile(id);
+
             if (file == null)
+            {
                 return new HttpResponseMessage(System.Net.HttpStatusCode.NotFound);
+            }
 
             var content = HttpResponseExtensions.CreateFileContent(file);
             return new HttpResponseMessage(System.Net.HttpStatusCode.OK)
@@ -40,7 +45,7 @@ namespace DatasetGame_API.Controllers
      
         private string GetRandomImageId()
         {
-            var files = Directory.GetFiles(_DirectoryPath);
+            var files = Directory.GetFiles(m_DirectoryPath);
             var rnd = new Random();
 
             return files[rnd.Next(files.Length)];
